@@ -28,6 +28,25 @@ For the full mission and manifesto, see:
 
 ---
 
+## Current MVP: Wellness / Recovery Ritual v1
+
+The current Gishiki MVP is a **Wellness / Recovery Ritual** implemented as a single static page:
+
+- **Path**: `index.html` (served as `/`)
+- **Flow**:
+  - Opening card with a calm intro and **Begin / Not now** options.
+  - 5 binary questions (Yes/No) about energy, body, slowing down, support, and readiness for one practical step.
+  - A small internal state model that infers patterns like `depleted`, `body needs`, `needs_pause`, `wants_support`, `ready_for_step`, etc.
+  - One primary result: a single next step phrased in a calm, non-bossy way.
+  - One alternate result via **Show another**, which flips between rest-leaning and action-leaning suggestions.
+  - A clear **Restart ritual** path that takes you back to the opening.
+
+Everything runs on the front-end only – no backend, no partners, no accounts.
+
+Ritual standard: [`docs/specs/ritual_standard.md`](docs/specs/ritual_standard.md)
+
+---
+
 ## Core idea
 
 Gishiki works through three layers:
@@ -36,7 +55,7 @@ Gishiki works through three layers:
 2. **Internal agent chamber ("the bar")** – Specialized agents observe, interpret, and whisper signals. They never speak directly to the human.
 3. **Capability network** – Connections to services, tools, and external systems that can produce outcomes in the real world.
 
-Examples of capabilities:
+Examples of capabilities (future work):
 
 - ordering food
 - booking transportation or lodging
@@ -59,7 +78,7 @@ Typical inputs:
 - `show another`
 - `proceed`
 
-Behind these small inputs, Gishiki performs richer orchestration.
+Behind these small inputs, Gishiki performs richer orchestration (for now within the front-end ritual, later with deeper multi-agent behavior).
 
 The orchestrator may respond with:
 
@@ -84,9 +103,14 @@ The orchestrator may respond with:
 
 ## Status
 
-Gishiki is in early exploration (v0):
+Gishiki is in early development, with **one working, web-verifiable ritual**:
 
-- A minimal web ritual lives in `index.html` and is deployed as a static page.
-- Engine/orchestrator design is being worked out from the manifesto inward.
+- `/` – Wellness / Recovery Ritual v1 (static, front-end only).
 
-Contributions at this stage are about **clarifying the ritual**, **stabilizing the orchestrator surface**, and **designing the internal agents and their signals**.
+Documentation:
+
+- Mission + manifesto: `docs/MANIFESTO.md`
+- Lifecycles (agents, orchestrator, user, partners): `docs/specs/lifecycles.md`
+- Ritual standard: `docs/specs/ritual_standard.md`
+
+Contributions at this stage are about **refining the ritual**, **shaping the orchestrator surface**, and **designing the internal agents and capability network that will eventually live behind this flow**.
