@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gishiki – YES/NO Ritual v0</title>
+  <style>
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+           font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:#050608; color:#fff; }
+    .card { border-radius:16px; padding:24px 20px; background:#10131a; border:1px solid #262c3a;
+            width:min(420px,100% - 32px); box-shadow:0 16px 40px rgba(0,0,0,0.6); }
+    .title { font-size:20px; margin:0 0 12px; }
+    .question { margin:8px 0 16px; font-size:18px; }
+    .actions { display:flex; gap:12px; }
+    button { flex:1; padding:10px 14px; border-radius:10px; border:1px solid #2c3443;
+             background:#1a202a; color:#fff; font-weight:600; font-size:16px; cursor:pointer; }
+    button:active { transform:translateY(1px); }
+    #debug { margin-top:8px; font-size:12px; color:#ff8080; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 class="title">Gishiki – YES/NO v0</h1>
+    <p id="q" class="question">Take a breath. We begin in a moment...</p>
+    <div class="actions">
+      <button id="yes">YES</button>
+      <button id="no">NO</button>
+    </div>
+    <div id="debug">(waiting for JS...)</div>
+  </div>
+
+  <script>
+    (function(){
+      var q = document.getElementById('q');
+      var debug = document.getElementById('debug');
+      debug.textContent = 'JS LOADED';
+
+      document.getElementById('yes').onclick = function () {
+        q.textContent = 'YES clicked';
+        debug.textContent = 'lastAction=YES';
+      };
+      document.getElementById('no').onclick = function () {
+        q.textContent = 'NO clicked';
+        debug.textContent = 'lastAction=NO';
+      };
+    })();
+  </script>
+</body>
+</html>
