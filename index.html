@@ -101,7 +101,7 @@
       background: #4be1a5;
     }
     .suggestion {
-      margin: 8px 0 12px;
+      margin: 8px 0 8px;
       font-size: 15px;
       line-height: 1.5;
     }
@@ -109,6 +109,11 @@
       font-size: 12px;
       color: #9ca6c0;
       margin-bottom: 4px;
+    }
+    .reflection {
+      font-size: 13px;
+      color: #c6cfeb;
+      margin: 4px 0 6px;
     }
     .pill {
       display: inline-flex;
@@ -158,6 +163,7 @@
     <!-- Result section -->
     <div id="result-section" class="hidden">
       <div class="section-label">Next step</div>
+      <p id="reflection-text" class="reflection"></p>
       <p id="result-text" class="suggestion"></p>
       <p id="result-tagline" class="tagline"></p>
       <div id="state-tags" class="note"></div>
@@ -173,11 +179,14 @@
 
   <script>
     (function(){
+      var RITUAL_MODE = 'wellness_recovery_v1';
+
       var introSection = document.getElementById('intro-section');
       var questionSection = document.getElementById('question-section');
       var resultSection = document.getElementById('result-section');
       var questionText = document.getElementById('question-text');
       var questionNote = document.getElementById('question-note');
+      var reflectionText = document.getElementById('reflection-text');
       var resultText = document.getElementById('result-text');
       var resultTagline = document.getElementById('result-tagline');
       var stateTagsEl = document.getElementById('state-tags');
@@ -190,8 +199,8 @@
       var altBtn = document.getElementById('result-alt');
       var restartBtn = document.getElementById('result-restart');
 
-      // --- Question model ---
-      var questions = [
+      // --- Question model (wellness / recovery) ---
+      var wellnessQuestions = [
         {
           id: 'running_low',
           text: 'Are you running low right now?',
@@ -229,7 +238,6 @@
         }
       ];
 
-      // --- State ---
       var currentIndex = 0;
       var scores = {};
 
@@ -237,6 +245,7 @@
         currentIndex = 0;
         scores = {};
         stateTagsEl.innerHTML = '';
+        reflectionText.textContent = '';
         resultText.textContent = '';
         resultTagline.textContent = '';
       }
@@ -250,6 +259,7 @@
       }
 
       function nextQuestion() {
+        var questions = wellnessQuestions; // future: use mode to select ritual
         if (currentIndex >= questions.length) {
           showResult();
           return;
@@ -282,6 +292,30 @@
           pill.textContent = tag.replace(/_/g, ' ');
           stateTagsEl.appendChild(pill);
         });
+      }
+
+      function reflectionForState(primaryState) {
+        switch (primaryState) {
+          case 'depleted':
+          case 'needs_rest_only':
+          case 'overstimulated':
+            return 'Here is what seems true: you are running low and need a pause before deciding anything.';
+          case 'body_needs':
+          case 'tense':
+            return 'Here is what your signals suggest: your body needs care before your mind takes on more.';
+          case 'isolated':
+          case 'wants_support':
+            return 'Here is what seems true: you would benefit from a small moment of contact, not more pressure.';
+          case 'needs_action':
+          case 'ready_for_step':
+            return 'Here is what your signals suggest: you are ready for one honest move, not a full overhaul.';
+          case 'avoidant_capable':
+            return 'Here is what seems true: you are capable, but something specific is being avoided.';
+          case 'self_reliant':
+            return 'Here is what your signals suggest: you want to stay with yourself for a moment before involving others.';
+          default:
+            return 'Here is what seems true: this feels heavier than productivity and may need care, not just effort.';
+        }
       }
 
       function showResult(overrideState) {
@@ -326,6 +360,7 @@
             tagline = 'When everything feels heavy at once, the next move might be support, not effort.';
         }
 
+        reflectionText.textContent = reflectionForState(primaryState);
         resultText.textContent = suggestion;
         resultTagline.textContent = tagline;
 
@@ -346,11 +381,13 @@
         introSection.classList.add('hidden');
         resultSection.classList.remove('hidden');
         stateTagsEl.innerHTML = '';
+        reflectionText.textContent = '';
         resultText.textContent = 'Noted. You do not have to go further right now.';
         resultTagline.textContent = 'You can come back when you want a small check-in, not a demand.';
       };
 
       yesBtn.onclick = function () {
+        var questions = wellnessQuestions;
         var q = questions[currentIndex];
         updateScores(q.yes);
         currentIndex += 1;
@@ -362,6 +399,7 @@
       };
 
       noBtn.onclick = function () {
+        var questions = wellnessQuestions;
         var q = questions[currentIndex];
         updateScores(q.no);
         currentIndex += 1;
@@ -373,7 +411,7 @@
       };
 
       acceptBtn.onclick = function () {
-        // No external action yet; just a small acknowledgement hook for future use.
+        // No external action yet; reserved hook for future logging/integration.
       };
 
       altBtn.onclick = function () {
